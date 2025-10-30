@@ -1,21 +1,27 @@
-const nomes = new Array("Jao", "Maria", "Xuxa")
-class ModelUsers {
-    FindAll() {
-        return nomes
-    }
-    FindOne(index) {
-        return nomes[index]
-    }
-    Create(nome) {
-        nomes.push(nome)
-        console.log(nomes)
-    }
-    Update(index,nome) {
-        return [index] = nome
-    }
-    Delete(index) {
-        return nomes.splice(index,1)
-    }
+import database from "../config/database.js"
 
+class User {
+    constructor() {
+        this.model = database.db.define('users', {
+            id: {
+                type: database.db.Sequelize.INTEGER,
+                primaryKey: true,
+                autoIncrement: true
+            },
+            nome: {
+                type: database.db.Sequelize.STRING
+            },
+            email: {
+                type: database.db.Sequelize.STRING
+            },
+            senha: {
+                type: database.db.Sequelize.STRING
+            },
+            ativo: {
+                type: database.db.Sequelize.BOOLEAN
+            }
+        })
+
+    }
 }
-export default new ModelUsers()
+export default new User().model
