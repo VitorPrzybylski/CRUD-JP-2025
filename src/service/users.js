@@ -1,6 +1,10 @@
 import User from '../model/users.js'
+import jwt from 'jsonwebtoken'
+const JWD_SEGREDO = "a-string-secret-at-least-256-bits-long"
+
+
 class ServiceUser {
-    FindAll(){
+    async FindAll(){
         return User.FindAll()
     }
     async FindOne(id){
@@ -52,7 +56,16 @@ class ServiceUser {
         }
         user.destroy(id)
     }
-    
+    async Login(email,senha){
+        if(!email || !senha){
+            throw new Error("email ou senha invalidos")
+        }
+        const user = await User.findOne({where:{email}})
+        if(!user|| !user.senha){
+            throw new Error("email ou senha invalidos")
+        }
+        return jwt.sign({id: user.id, nome: user.nome },JWD_SEGREDO,{expiresIn: 60*60})
+    }
     
 }
 export default new ServiceUser()

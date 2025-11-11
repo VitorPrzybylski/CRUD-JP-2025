@@ -1,9 +1,9 @@
 import ServiceUser from '../service/users.js'
 class ControllerUser {
-    FindAll(req, res) {
+    async FindAll(_, res) {
         try {
-            const nomes = ServiceUser.FindAll()
-            res.send({ nomes })
+            const user = await ServiceUser.FindAll()
+            res.send({ user })
         } catch (error) {
             res.status(500).send({ error: error.message })
         }
@@ -31,7 +31,7 @@ class ControllerUser {
         const id = req.params.id
         const { nome, senha, email, ativo } = req.body
         try {
-           await ServiceUser.Update(id, nome, senha, email, ativo)
+            await ServiceUser.Update(id, nome, senha, email, ativo)
             res.status(200).send()
         } catch (error) {
             res.status(500).send({ error: error.message })
@@ -46,7 +46,15 @@ class ControllerUser {
             res.status(500).send({ error: error.message })
         }
     }
+    async Login(req, res) {
+        try {
+            const { email, senha } = req.body
+            const token = await ServiceUser.Login(email, senha)
+            res.send({token:token})
+        } catch (error) {
+            res.status(500).send({ error: error.message })
+        }
+    }
 }
-
 
 export default new ControllerUser()
