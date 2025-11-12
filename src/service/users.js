@@ -6,7 +6,7 @@ const JWD_SEGREDO = "a-string-secret-at-least-256-bits-long"
 
 
 class ServiceUser {
-    FindAll() {
+    async FindAll() {
         return User.findAll()
     }
     async FindOne(id) {
@@ -22,14 +22,14 @@ class ServiceUser {
 
         return user
     }
-    async Create(nome, senha, email, ativo,permissao) {
+    async Create(nome, senha, email, ativo, permissao) {
         if (!nome || !senha || !email) {
             throw new Error("Favor preencer todods os campos")
 
         }
         const senhaCriptografada = await bcrypt.hash(String(senha), SALT)
         await User.create({
-            nome, senha: senhaCriptografada, email, ativo,permissao
+            nome, senha: senhaCriptografada, email, ativo, permissao
         })
     }
     async Update(id, nome, senha, email, ativo) {
@@ -45,8 +45,8 @@ class ServiceUser {
         user.nome = nome
         //troca a senha, e quando recebe ela, criptografa, se já estiver criptografada, colocar a mesma
         user.senha = senha
-        ?await bcrypt.hash(String(senha), SALT)
-        :user.senha
+            ? await bcrypt.hash(String(senha), SALT)
+            : user.senha
 
         user.email = email
         user.ativo = ativo
@@ -74,7 +74,7 @@ class ServiceUser {
         ) {
             throw new Error("email ou senha invalidos")
         }
-        return jwt.sign({ id: user.id, nome: user.nome,permissao:user.permissao }, JWD_SEGREDO, { expiresIn: 60 * 60 })
+        return jwt.sign({ id: user.id, nome: user.nome, permissao: user.permissao }, JWD_SEGREDO, { expiresIn: 60 * 60 })
     }
 
 }
