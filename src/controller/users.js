@@ -1,9 +1,9 @@
 import ServiceUser from '../service/users.js'
 class ControllerUser {
-      FindAll(_, res) {
+      async FindAll(_, res) {
         try {
-            const nomes = ServiceUser.FindAll()
-            res.status(200).send({ nomes })
+            const users = await ServiceUser.FindAll()
+            res.status(200).send({ users })
         } catch (error) {
             res.status(500).send({ error: error.message })
         }
