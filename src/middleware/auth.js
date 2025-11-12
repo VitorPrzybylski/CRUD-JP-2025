@@ -9,8 +9,9 @@ export default async function authMiddleware(req, res, next) {
             throw new Error("sem permissao")
         }
         const decoded =jwt.verify(token.split(' ')[1],JWD_SEGREDO)
+        
         const user = await ServiceUser.FindOne(decoded.id)
-        console.log(decoded)
+
         req.headers.user=user
         next()
         
